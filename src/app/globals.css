@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    /* Fondo blanco y texto gris oscuro por defecto */
+    @apply bg-white text-gray-900;
+  }
+}
