@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -17,10 +15,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (!resendApiKey) {
+      console.error("RESEND_API_KEY no está definido en .env.local");
+      return NextResponse.json(
+        { ok: false, error: "Configuración del servidor incompleta" },
+        { status: 500 }
+      );
+    }
+
+    const resend = new Resend(resendApiKey);
+
     await resend.emails.send({
-        from: "Conecta2 Web <onboarding@resend.dev>",
-        to: adminEmail,
-        subject: `Nueva solicitud de trabajo – ${name}`,
+      from: "Conecta2 Web <onboarding@resend.dev>",
+      to: adminEmail,
+      subject: `Nueva solicitud de trabajo – ${name}`,
       html: `
   <!DOCTYPE html>
   <html lang="es">
