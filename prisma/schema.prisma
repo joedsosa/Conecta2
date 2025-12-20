@@ -3,17 +3,38 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"    // ← CAMBIAR de sqlite a postgresql
   url      = env("DATABASE_URL")
 }
 
 model Job {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  location    String?
-  type        String?
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String     @id @default(cuid())    // ← CAMBIAR de Int a String
+  title        String
+  description  String
+  location     String?
+  type         String?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+  deletedBy    String?
+  status       String     @default("OPEN")
+  filledAt     DateTime?
+  hiredName    String?
+  hiredContact String?
+  hiredNotes   String?
+  audits       JobAudit[]
+}
+
+model JobAudit {
+  id        String   @id @default(cuid())    // ← CAMBIAR de Int a String
+  jobId     String                           // ← CAMBIAR de Int a String
+  action    String
+  actor     String?
+  meta      String?
+  createdAt DateTime @default(now())
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([createdAt])
 }

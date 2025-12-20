@@ -1,0 +1,15 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: [
+      "@prisma/client",
+      "@prisma/adapter-libsql",
+      "@libsql/client",
+      "@libsql/isomorphic-ws",
+      "libsql",
+      "pdfkit", // ✅ IMPORTANTE
+    ],
+  },
+};
+
+module.exports = nextConfig;
