@@ -1,0 +1,39 @@
+
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  const envVars = {
+    // Variables críticas para login
+    ADMIN_USER: process.env.ADMIN_USER || "❌ NOT SET",
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ? "✅ SET (hidden)" : "❌ NOT SET",
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL || "❌ NOT SET",
+    ADMIN_TOKEN: process.env.ADMIN_TOKEN ? "✅ SET (hidden)" : "❌ NOT SET",
+    
+    // Database
+    DATABASE_URL: process.env.DATABASE_URL ? "✅ SET" : "❌ NOT SET",
+    
+    // Email
+    RESEND_API_KEY: process.env.RESEND_API_KEY ? "✅ SET (hidden)" : "❌ NOT SET",
+    
+    // Entorno
+    NODE_ENV: process.env.NODE_ENV || "❌ NOT SET",
+    
+    // Todas las variables que comienzan con ADMIN
+    allAdminVars: Object.keys(process.env)
+      .filter(key => key.startsWith("ADMIN_"))
+      .reduce((acc, key) => {
+        acc[key] = process.env[key] ? "SET" : "NOT SET";
+        return acc;
+      }, {} as Record<string, string>),
+    
+    // Verificar también mayúsculas/minúsculas
+    lowercaseCheck: {
+      admin_user: process.env.admin_user || "NOT SET (lowercase)",
+      ADMIN_USER: process.env.ADMIN_USER || "NOT SET (uppercase)",
+      "ADMIN-USER": process.env["ADMIN-USER"] || "NOT SET (with dash)"
+    }
+  };
+  
+  return NextResponse.json(envVars);
+}
+'@ | Set-Content src/app/api/vercel-env/route.ts -Encoding UTF8

@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
     const res = await fetch("/api/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user, pass }),
+      body: JSON.stringify({ user, password: pass }),
     });
 
     if (res.ok) router.push("/admin");
