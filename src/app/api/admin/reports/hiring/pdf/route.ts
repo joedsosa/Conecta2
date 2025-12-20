@@ -40,7 +40,8 @@ function fmtDate(d: Date) {
   return d.toLocaleDateString();
 }
 
-async function docToBuffer(doc: PDFDocument) {
+// ✅ CORREGIDO: Usar InstanceType<typeof PDFDocument>
+async function docToBuffer(doc: InstanceType<typeof PDFDocument>) {
   const chunks: Buffer[] = [];
   return await new Promise<Buffer>((resolve, reject) => {
     doc.on("data", (c) => chunks.push(Buffer.isBuffer(c) ? c : Buffer.from(c)));
